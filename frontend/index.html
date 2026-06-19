@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>公众号文章阅读器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Tab 内容区 -->
+        <div id="tab-content">
+            <!-- Tab 1: 文章流 - 始终显示全部最新文章 -->
+            <div class="tab-page active" id="tab-feed">
+                <div class="page-header">
+                    <h1>最新文章</h1>
+                </div>
+                <div class="article-list" id="feed-list">
+                    <!-- 文章列表由 JS 渲染 -->
+                    <div class="loading">加载中...</div>
+                </div>
+            </div>
+
+            <!-- Tab 2: 公众号 - 独立导航，纵深结构 -->
+            <div class="tab-page" id="tab-accounts">
+                <div class="page-header">
+                    <h1 id="accounts-header" onclick="backToAccountList()" style="cursor: pointer;" title="点击返回公众号列表">公众号</h1>
+                </div>
+                <!-- 第一层：公众号列表 -->
+                <div class="account-list" id="account-list">
+                    <!-- 公众号列表由 JS 渲染 -->
+                    <div class="loading">加载中...</div>
+                </div>
+                <!-- 第二层：选中公众号后的文章列表 -->
+                <div class="article-list" id="account-articles" style="display: none;">
+                    <!-- 文章列表在这里 -->
+                </div>
+            </div>
+
+            <!-- Tab 3: 我的 -->
+            <div class="tab-page" id="tab-my">
+                <div class="page-header">
+                    <h1>我的</h1>
+                </div>
+                <!-- 我的内部顶部分页 -->
+                <div class="my-inner-tabs">
+                    <div class="my-inner-tab active" data-my-tab="recent" onclick="switchMyTab('recent')">最近阅读</div>
+                    <div class="my-inner-tab" data-my-tab="collect" onclick="switchMyTab('collect')">我的收藏</div>
+                </div>
+                <div class="my-inner-content">
+                    <div class="my-inner-page active" id="my-recent">
+                        <div class="article-list-my" id="recent-list">
+                            <div class="empty-tip">暂无阅读记录</div>
+                        </div>
+                    </div>
+                    <div class="my-inner-page" id="my-collect">
+                        <div class="article-list-my" id="collect-list">
+                            <div class="empty-tip">暂无收藏</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部 Tab 栏 -->
+        <nav class="tab-bar">
+            <div class="tab-item active" data-tab="tab-feed" onclick="switchTab('tab-feed')">
+                <span class="tab-icon">📄</span>
+                <span class="tab-label">文章</span>
+            </div>
+            <div class="tab-item" data-tab="tab-accounts" onclick="switchTab('tab-accounts')">
+                <span class="tab-icon">📚</span>
+                <span class="tab-label">公众号</span>
+            </div>
+            <div class="tab-item" data-tab="tab-my" onclick="switchTab('tab-my')">
+                <span class="tab-icon">👤</span>
+                <span class="tab-label">我的</span>
+            </div>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
