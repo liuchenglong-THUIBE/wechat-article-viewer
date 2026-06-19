@@ -1,15 +1,15 @@
-# Quick Start
+# 快速开始
 
-This guide gets a fresh clone to one successful local update.
+这份指南用于帮助你从一个全新的 clone 开始，完成一次本地更新测试。
 
-## 1. Clone
+## 1. 克隆项目
 
 ```bash
-git clone https://github.com/yourusername/wechat-article-reader.git
-cd wechat-article-reader
+git clone https://github.com/yourusername/wechat-article-viewer.git
+cd wechat-article-viewer
 ```
 
-## 2. Create Python Environment
+## 2. 创建 Python 环境
 
 ```bash
 python3 -m venv .venv
@@ -19,17 +19,17 @@ pip install -e .
 playwright install chromium
 ```
 
-## 3. Configure
+## 3. 配置项目
 
-Choose one configuration method.
+请选择一种配置方式。
 
-### Option A: Environment Variables
+### 方式 A：使用环境变量
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env`:
+编辑 `.env`：
 
 ```dotenv
 WECHAT_READER_LLM_API_KEY=your-api-key-here
@@ -38,7 +38,7 @@ WECHAT_READER_LLM_BASE_URL=https://openrouter.ai/api/v1
 WECHAT_READER_FRONTEND_DIR=frontend
 ```
 
-Load it in your shell:
+在当前 shell 中加载：
 
 ```bash
 set -a
@@ -46,14 +46,14 @@ source .env
 set +a
 ```
 
-### Option B: config.json
+### 方式 B：使用 config.json
 
 ```bash
 cp config/config.json.example config.json
 wechat-reader config set llm_api_key "your-api-key"
 ```
 
-Important:
+重要配置：
 
 ```json
 {
@@ -61,17 +61,17 @@ Important:
 }
 ```
 
-The program writes API data to `frontend/api`.
+程序会把 API 数据写入 `frontend/api`。
 
-## 4. Initialize
+## 4. 初始化
 
 ```bash
 wechat-reader init
 ```
 
-This creates the frontend API data directory and writes the default local configuration.
+这个命令会创建前端 API 数据目录，并写入默认本地配置。
 
-## 5. Add Public Accounts
+## 5. 添加公众号
 
 ```bash
 wechat-reader monitor add "晚点LatePost"
@@ -79,21 +79,21 @@ wechat-reader monitor add "腾讯研究院"
 wechat-reader monitor list
 ```
 
-## 6. Run One Update
+## 6. 执行一次更新
 
 ```bash
 wechat-reader weekly-update --days 2
 ```
 
-If WeChat login is required, follow the QR-code login flow shown by the tool. Login state is stored locally and should not be committed.
+如果需要微信登录，请按工具显示的二维码登录流程操作。登录状态会保存在本地，不应提交到 Git。
 
-## 7. Check Data
+## 7. 检查数据
 
 ```bash
 ls frontend/api
 ```
 
-Expected files:
+预期文件：
 
 ```text
 accounts.json
@@ -101,65 +101,65 @@ articles.json
 monitors.json
 ```
 
-## 8. Publish Static Site
+## 8. 发布静态网站
 
-If your GitHub repository and static host are configured:
+如果你的 GitHub 仓库和静态托管服务已经配置好：
 
 ```bash
 wechat-reader export --sync
 ```
 
-For Cloudflare Pages:
+Cloudflare Pages 推荐配置：
 
-- Build command: `echo "No build needed"`
-- Build output directory: `frontend`
+- 构建命令：`echo "No build needed"`
+- 构建输出目录：`frontend`
 
-## 9. Optional Daily Schedule
+## 9. 可选：每日定时任务
 
-Copy the reusable script template:
+复制可复用脚本模板：
 
 ```bash
 cp scripts/daily_update.example.sh scripts/daily_update.sh
 chmod +x scripts/daily_update.sh
 ```
 
-Replace:
+替换：
 
 ```text
-__PROJECT_DIR__  absolute path to this repository
-__PYTHON_BIN__   absolute path to .venv/bin/python
+__PROJECT_DIR__  本仓库的绝对路径
+__PYTHON_BIN__   .venv/bin/python 的绝对路径
 __DAYS__         2
 ```
 
-Copy the launchd template:
+复制 launchd 模板：
 
 ```bash
 cp launchd/com.wechat-reader.daily-update.plist.template \
   "$HOME/Library/LaunchAgents/com.wechat-reader.daily-update.plist"
 ```
 
-Replace:
+替换：
 
 ```text
-__PROJECT_DIR__  absolute path to this repository
+__PROJECT_DIR__  本仓库的绝对路径
 __HOUR__         10
 __MINUTE__       0
 ```
 
-Load it:
+加载定时任务：
 
 ```bash
 launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.wechat-reader.daily-update.plist"
 launchctl enable "gui/$(id -u)/com.wechat-reader.daily-update"
 ```
 
-Test once:
+手动测试一次：
 
 ```bash
 launchctl kickstart -k "gui/$(id -u)/com.wechat-reader.daily-update"
 ```
 
-Check logs:
+查看日志：
 
 ```bash
 tail -f logs/daily-update.log

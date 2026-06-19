@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# Copy this file to scripts/daily_update.sh and replace all placeholders.
-# Keep the copied file local if it contains machine-specific paths.
+# 将本文件复制为 scripts/daily_update.sh，并替换所有占位符。
+# 如果复制后的文件包含本机路径，请只保留在本地，不要提交到 Git。
 
 PROJECT_DIR="__PROJECT_DIR__"
 PYTHON_BIN="__PYTHON_BIN__"
@@ -15,7 +15,7 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 mkdir -p "$LOG_DIR"
 
 if ! mkdir "$LOCK_DIR" 2>/dev/null; then
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] daily update is already running, skip"
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] 每日更新已在运行，跳过本次执行"
   exit 0
 fi
 
@@ -27,7 +27,7 @@ trap cleanup EXIT
 cd "$PROJECT_DIR"
 export PYTHONPATH="$PROJECT_DIR/src"
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] daily update started"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 每日更新开始"
 "$PYTHON_BIN" -m wechat_reader weekly-update --days "$DAYS"
 "$PYTHON_BIN" -m wechat_reader export --sync
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] daily update finished"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 每日更新完成"

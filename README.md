@@ -1,47 +1,47 @@
-# WeChat Article Reader
+# 微信公众号文章阅读器
 
-Local-first tool for collecting WeChat public account articles, generating AI summaries, and publishing a static reading site.
+这是一个本地优先的微信公众号文章采集与阅读工具。它可以抓取已监控公众号的近期文章，使用 AI 生成摘要，并把结果发布成一个静态阅读网站。
 
-This repository is designed for both humans and AI coding agents. You can operate it manually from the command line, or ask an agent such as Codex, TRAE, Claude Code, or OpenClaw to read the docs and run the documented commands.
+这个仓库面向中国用户和中文使用场景设计。你既可以手动执行命令，也可以让 Codex、TRAE、Claude Code、OpenClaw 等 AI 编程 Agent 读取项目文档并按说明操作。
 
-## What It Does
+## 项目能做什么
 
-- Collects recent articles from monitored WeChat public accounts.
-- Reuses a local WeChat public platform login session.
-- Extracts article text and generates AI summaries with an OpenAI-compatible API.
-- Stores static JSON data in `frontend/api`.
-- Serves a pure static reading frontend from `frontend`.
-- Optionally syncs the frontend to GitHub for Cloudflare Pages or another static host.
-- Supports local daily automation through macOS `launchd` templates.
+- 采集已监控微信公众号的近期文章。
+- 复用本地微信公众号平台登录状态。
+- 提取文章正文，并通过 OpenAI 兼容接口生成 AI 摘要。
+- 将静态 JSON 数据写入 `frontend/api`。
+- 通过 `frontend` 提供纯静态阅读前端。
+- 可选使用 GitHub、Cloudflare Pages 或其他静态托管服务发布网站。
+- 提供 macOS `launchd` 模板，方便配置本地每日自动更新。
 
-## Who This Is For
+## 适合谁使用
 
-- People who want a personal WeChat article reading website.
-- People who prefer local automation instead of a hosted crawler service.
-- Developers who want to let an AI coding agent configure and operate the project.
-- Users who are comfortable scanning a WeChat login QR code and managing their own API keys.
+- 想搭建个人微信公众号文章阅读网站的用户。
+- 希望把采集逻辑留在本地，而不是依赖云端爬虫服务的用户。
+- 想让 AI 编程 Agent 帮自己配置、运行和维护项目的开发者。
+- 能自行扫码登录微信公众号平台，并管理自己 LLM API Key 的用户。
 
-This project is not a hosted SaaS. WeChat login state, LLM keys, and Git credentials remain on your machine.
+这个项目不是托管 SaaS。微信登录状态、LLM API Key、Git 凭据都会保留在你的本地机器上。
 
-## How It Works
+## 工作流程
 
-1. You configure an OpenAI-compatible LLM provider.
-2. You log into WeChat public platform locally.
-3. You add public accounts to the monitor list.
-4. `wechat-reader weekly-update --days N` fetches recent article links.
-5. The crawler extracts article content and generates summaries.
-6. Data is written to `frontend/api/articles.json`, `accounts.json`, and `monitors.json`.
-7. `wechat-reader export --sync` can push the static frontend to GitHub.
+1. 配置一个 OpenAI 兼容的 LLM 服务。
+2. 在本地完成微信公众号平台登录。
+3. 添加需要监控的公众号。
+4. 执行 `wechat-reader weekly-update --days N` 获取近期文章链接。
+5. 程序提取文章正文并生成摘要。
+6. 数据写入 `frontend/api/articles.json`、`accounts.json` 和 `monitors.json`。
+7. 执行 `wechat-reader export --sync` 可将静态前端同步到 GitHub。
 
-## Quick Start
+## 快速开始
 
-For a short copy-and-run setup path, read [QUICKSTART.md](QUICKSTART.md).
+如果你想按最短路径跑通一次，请阅读 [QUICKSTART.md](QUICKSTART.md)。
 
-Basic flow:
+基础流程如下：
 
 ```bash
-git clone https://github.com/yourusername/wechat-article-reader.git
-cd wechat-article-reader
+git clone https://github.com/yourusername/wechat-article-viewer.git
+cd wechat-article-viewer
 
 python3 -m venv .venv
 source .venv/bin/activate
@@ -55,129 +55,129 @@ wechat-reader weekly-update --days 2
 wechat-reader export --sync
 ```
 
-If authentication is required, run an update command in a normal terminal and follow the WeChat login prompt.
+如果命令提示需要登录，请在普通终端里运行更新命令，并按提示完成微信扫码登录。
 
-## Agent-Friendly Usage
+## 配合 AI Agent 使用
 
-If you want an AI coding agent to operate this project, ask it to read [AGENTS.md](AGENTS.md) first.
+如果你希望让 AI 编程 Agent 操作这个项目，请先让它阅读 [AGENTS.md](AGENTS.md)。
 
-Recommended prompt:
+推荐提示词：
 
 ```text
-Please read README.md, AGENTS.md, QUICKSTART.md, and TROUBLESHOOTING.md.
-Help me configure this WeChat Article Reader locally, add my monitored public accounts,
-run one update test, and install a daily 10:00 local schedule.
-Do not commit .env, config.json, data/session.json, logs, backups, or local runtime files.
+请先阅读 README.md、AGENTS.md、QUICKSTART.md 和 TROUBLESHOOTING.md。
+请帮我在本地配置这个微信公众号文章阅读器，添加我要监控的公众号，
+运行一次更新测试，并安装每天 10:00 执行的本地定时任务。
+不要提交 .env、config.json、data/session.json、logs、backups 或本地运行文件。
 ```
 
-## Common Commands
+## 常用命令
 
 ```bash
-# Initialize directories and config
+# 初始化目录和配置
 wechat-reader init
 
-# Configure LLM values
+# 配置 LLM 参数
 wechat-reader config set llm_api_key "your-api-key"
 wechat-reader config set llm_model "minimax/minimax-m2.5:free"
 wechat-reader config set llm_base_url "https://openrouter.ai/api/v1"
 
-# Manage monitored public accounts
+# 管理监控公众号
 wechat-reader monitor add "公众号名称"
 wechat-reader monitor list
 wechat-reader monitor remove "公众号名称"
 
-# Collect one account or one article
+# 采集单个公众号或单篇文章
 wechat-reader collect account "公众号名称" --recent 7
 wechat-reader collect article "https://mp.weixin.qq.com/s/..."
 
-# Update all monitored accounts
+# 更新所有已监控公众号
 wechat-reader weekly-update --days 2
 
-# Sync the static frontend to Git
+# 将静态前端同步到 Git
 wechat-reader export --sync
 ```
 
-## Daily Automation
+## 每日自动化
 
-The recommended automation is local. This works better than a cloud-only job because WeChat article collection depends on local login state.
+推荐使用本地自动化。微信公众号文章采集依赖本地登录状态，因此本地计划任务通常比纯云端任务更稳定。
 
-Reusable templates are provided:
+项目提供了可复用模板：
 
 - `scripts/daily_update.example.sh`
 - `launchd/com.wechat-reader.daily-update.plist.template`
 
-Typical macOS setup:
+macOS 典型配置：
 
 ```bash
 cp scripts/daily_update.example.sh scripts/daily_update.sh
 chmod +x scripts/daily_update.sh
 ```
 
-Replace placeholders in `scripts/daily_update.sh`:
+替换 `scripts/daily_update.sh` 里的占位符：
 
 ```text
-__PROJECT_DIR__  absolute project path
-__PYTHON_BIN__   Python interpreter path, for example /path/to/.venv/bin/python
-__DAYS__         recommended value: 2
+__PROJECT_DIR__  项目绝对路径
+__PYTHON_BIN__   Python 解释器路径，例如 /path/to/.venv/bin/python
+__DAYS__         推荐值：2
 ```
 
-Then copy and fill the launchd template:
+然后复制并填写 launchd 模板：
 
 ```bash
 cp launchd/com.wechat-reader.daily-update.plist.template \
   "$HOME/Library/LaunchAgents/com.wechat-reader.daily-update.plist"
 ```
 
-Replace placeholders:
+替换占位符：
 
 ```text
-__PROJECT_DIR__  absolute project path
+__PROJECT_DIR__  项目绝对路径
 __HOUR__         10
 __MINUTE__       0
 ```
 
-Load the schedule:
+加载定时任务：
 
 ```bash
 launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.wechat-reader.daily-update.plist"
 launchctl enable "gui/$(id -u)/com.wechat-reader.daily-update"
 ```
 
-Check status:
+查看状态：
 
 ```bash
 launchctl print "gui/$(id -u)/com.wechat-reader.daily-update"
 ```
 
-View logs:
+查看日志：
 
 ```bash
 tail -f logs/daily-update.log
 tail -f logs/daily-update.err.log
 ```
 
-## Publishing
+## 发布网站
 
-The frontend is a static site in `frontend`.
+前端是位于 `frontend` 的静态网站。
 
-For Cloudflare Pages:
+Cloudflare Pages 推荐配置：
 
-- Build command: `echo "No build needed"`
-- Build output directory: `frontend`
+- 构建命令：`echo "No build needed"`
+- 构建输出目录：`frontend`
 
-`wechat-reader export --sync` uses Git to publish the frontend. Review your repository layout before enabling this, because the current implementation uses a subtree-based push for `frontend`.
+`wechat-reader export --sync` 会使用 Git 发布前端。启用前请先确认你的仓库结构，因为当前实现采用基于 `frontend` 目录的 subtree 推送方式。
 
-## Configuration
+## 配置说明
 
-Use either `config.json` or environment variables.
+可以使用 `config.json` 或环境变量。
 
-Copy the example:
+复制配置示例：
 
 ```bash
 cp config/config.json.example config.json
 ```
 
-Important path rule:
+重要路径规则：
 
 ```json
 {
@@ -185,44 +185,44 @@ Important path rule:
 }
 ```
 
-The program appends `/api` internally, so data is written to `frontend/api`.
+程序内部会自动追加 `/api`，所以数据实际写入 `frontend/api`。
 
-Environment variable equivalent:
+对应的环境变量写法：
 
 ```bash
 WECHAT_READER_FRONTEND_DIR=frontend
 ```
 
-Supported OpenAI-compatible providers include OpenRouter, OpenAI, Doubao, Qwen-compatible gateways, and other compatible endpoints.
+支持 OpenAI 兼容接口，包括 OpenRouter、OpenAI、豆包、通义千问兼容网关，以及其他兼容服务。
 
-## Safety Notes
+## 安全提示
 
-Do not commit:
+不要提交：
 
 - `.env`
 - `config.json`
 - `data/session.json`
 - `logs/`
 - `backups/`
-- local launchd files that contain private machine paths
+- 包含本机私有路径的本地 launchd 文件
 
-The project `.gitignore` excludes common local runtime files, but always review `git status` before committing or pushing.
+项目的 `.gitignore` 已排除常见本地运行文件，但提交或推送前仍应检查 `git status`。
 
-## Troubleshooting
+## 故障排查
 
-Read [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common failures:
+常见问题请阅读 [TROUBLESHOOTING.md](TROUBLESHOOTING.md)：
 
-- WeChat login expired.
-- No articles found.
-- Article content extraction failed.
-- LLM summary failed.
-- GitHub push failed.
-- launchd did not run.
+- 微信登录状态过期。
+- 没有采集到文章。
+- 文章正文解析失败。
+- LLM 摘要生成失败。
+- GitHub 推送失败。
+- launchd 没有运行。
 
-## Project Structure
+## 项目结构
 
 ```text
-wechat-article-reader/
+wechat-article-viewer/
 ├── AGENTS.md
 ├── QUICKSTART.md
 ├── TROUBLESHOOTING.md
@@ -246,6 +246,6 @@ wechat-article-reader/
     └── wechat_reader/
 ```
 
-## License
+## 许可证
 
 MIT License

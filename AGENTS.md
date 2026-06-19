@@ -1,22 +1,22 @@
 # AGENTS.md
 
-This file is for AI coding agents operating this repository.
+这个文件面向操作本仓库的 AI 编程 Agent，包括 Codex、TRAE、Claude Code、OpenClaw 等。
 
-## Purpose
+## 项目目的
 
-This project is a local CLI tool for collecting WeChat public account articles, generating AI summaries, and updating a static reading website.
+本项目是一个本地 CLI 工具，用于采集微信公众号文章、生成 AI 摘要，并更新一个静态阅读网站。
 
-The safest operating model is:
+最安全的操作方式是：
 
-1. Keep WeChat login state and API keys local.
-2. Use documented CLI commands.
-3. Use templates for local schedules.
-4. Read logs before retrying failed work.
-5. Preserve user-owned data in `frontend/api`.
+1. 微信登录状态和 API Key 只保留在本地。
+2. 优先使用文档中给出的 CLI 命令。
+3. 配置本地定时任务时使用项目提供的模板。
+4. 失败后先读取日志，再决定是否重试。
+5. 保留用户在 `frontend/api` 下已有的数据。
 
-## Read First
+## 修改前先阅读
 
-Before changing anything, read:
+在修改任何文件前，请先阅读：
 
 - `README.md`
 - `QUICKSTART.md`
@@ -24,25 +24,25 @@ Before changing anything, read:
 - `config/config.json.example`
 - `.env.example`
 
-If the user asks for daily automation, inspect:
+如果用户要求配置每日自动化任务，请检查：
 
 - `scripts/daily_update.example.sh`
 - `launchd/com.wechat-reader.daily-update.plist.template`
 
-## Safety Rules
+## 安全规则
 
-- Do not commit `.env`.
-- Do not commit `config.json`.
-- Do not commit `data/session.json` or any file under `data/`.
-- Do not commit `logs/`, `backups/`, or `.daily-update.lock/`.
-- Do not delete `frontend/api/articles.json`, `accounts.json`, or `monitors.json` unless the user explicitly asks.
-- Do not overwrite an existing working `scripts/daily_update.sh` or launchd plist without showing the diff to the user.
-- Do not run destructive Git commands such as `git reset --hard` or `git checkout --` unless the user explicitly asks.
-- If WeChat login is required, stop and ask the user to complete the QR-code login in a normal browser or terminal session.
+- 不要提交 `.env`。
+- 不要提交 `config.json`。
+- 不要提交 `data/session.json` 或 `data/` 下的任何文件。
+- 不要提交 `logs/`、`backups/` 或 `.daily-update.lock/`。
+- 除非用户明确要求，否则不要删除 `frontend/api/articles.json`、`accounts.json` 或 `monitors.json`。
+- 不要直接覆盖已有可用的 `scripts/daily_update.sh` 或 launchd plist；如需修改，先向用户展示差异。
+- 除非用户明确要求，否则不要执行 `git reset --hard`、`git checkout --` 等破坏性 Git 命令。
+- 如果需要微信登录，请停止自动操作，并要求用户在普通浏览器或终端会话中完成二维码扫码登录。
 
-## Common Commands
+## 常用命令
 
-Install from source:
+从源码安装：
 
 ```bash
 python3 -m venv .venv
@@ -51,13 +51,13 @@ pip install -e .
 playwright install chromium
 ```
 
-Initialize:
+初始化：
 
 ```bash
 wechat-reader init
 ```
 
-Configure LLM:
+配置 LLM：
 
 ```bash
 wechat-reader config set llm_api_key "your-api-key"
@@ -65,7 +65,7 @@ wechat-reader config set llm_model "minimax/minimax-m2.5:free"
 wechat-reader config set llm_base_url "https://openrouter.ai/api/v1"
 ```
 
-Manage monitors:
+管理监控公众号：
 
 ```bash
 wechat-reader monitor add "公众号名称"
@@ -73,36 +73,36 @@ wechat-reader monitor list
 wechat-reader monitor remove "公众号名称"
 ```
 
-Run update:
+执行更新：
 
 ```bash
 wechat-reader weekly-update --days 2
 ```
 
-Publish frontend:
+发布前端：
 
 ```bash
 wechat-reader export --sync
 ```
 
-Run from source without installing:
+不安装包，直接从源码运行：
 
 ```bash
 PYTHONPATH=src python3 -m wechat_reader weekly-update --days 2
 PYTHONPATH=src python3 -m wechat_reader export --sync
 ```
 
-## Daily Schedule Setup
+## 每日定时任务配置
 
-Prefer the provided templates instead of inventing new launchd files.
+优先使用项目提供的模板，不要临时发明新的 launchd 文件。
 
-1. Copy `scripts/daily_update.example.sh` to `scripts/daily_update.sh`.
-2. Replace `__PROJECT_DIR__`, `__PYTHON_BIN__`, and `__DAYS__`.
-3. Copy `launchd/com.wechat-reader.daily-update.plist.template` to `~/Library/LaunchAgents/com.wechat-reader.daily-update.plist`.
-4. Replace `__PROJECT_DIR__`, `__HOUR__`, and `__MINUTE__`.
-5. Load the plist with `launchctl bootstrap`.
+1. 复制 `scripts/daily_update.example.sh` 到 `scripts/daily_update.sh`。
+2. 替换 `__PROJECT_DIR__`、`__PYTHON_BIN__` 和 `__DAYS__`。
+3. 复制 `launchd/com.wechat-reader.daily-update.plist.template` 到 `~/Library/LaunchAgents/com.wechat-reader.daily-update.plist`。
+4. 替换 `__PROJECT_DIR__`、`__HOUR__` 和 `__MINUTE__`。
+5. 使用 `launchctl bootstrap` 加载 plist。
 
-Recommended default:
+推荐默认值：
 
 ```text
 __DAYS__=2
@@ -110,32 +110,32 @@ __HOUR__=10
 __MINUTE__=0
 ```
 
-Use `--days 2` for daily updates unless the user prefers a stricter one-day window. Link-based deduplication avoids duplicate articles while reducing boundary misses.
+除非用户更希望严格只采集过去一天，否则每日更新建议使用 `--days 2`。系统会按文章链接去重，这样可以减少跨天边界漏抓的风险。
 
-## Logs
+## 日志
 
-Default schedule logs:
+默认定时任务日志：
 
 ```bash
 tail -f logs/daily-update.log
 tail -f logs/daily-update.err.log
 ```
 
-If an update partially fails, check whether the failure is:
+如果更新部分失败，请判断失败类型：
 
-- Authentication failure.
-- LLM summary failure.
-- Article content extraction failure.
-- Git sync failure.
+- 微信登录失败。
+- LLM 摘要生成失败。
+- 文章正文解析失败。
+- Git 同步失败。
 
-Content extraction failures for individual articles are partial failures. They do not always mean the whole update is broken.
+单篇文章正文解析失败通常是局部失败，不一定表示整个更新任务不可用。
 
-## Recommended User Prompt
+## 推荐给用户的提示词
 
 ```text
-Please read README.md, AGENTS.md, QUICKSTART.md, and TROUBLESHOOTING.md.
-Help me configure this WeChat Article Reader locally.
-Use my LLM API key, add my monitored public accounts, run one update test,
-and install a daily 10:00 local schedule.
-Do not commit .env, config.json, data/session.json, logs, backups, or local runtime files.
+请先阅读 README.md、AGENTS.md、QUICKSTART.md 和 TROUBLESHOOTING.md。
+请帮我在本地配置这个微信公众号文章阅读器。
+使用我的 LLM API Key，添加我要监控的公众号，运行一次更新测试，
+并安装每天 10:00 执行的本地定时任务。
+不要提交 .env、config.json、data/session.json、logs、backups 或本地运行文件。
 ```
