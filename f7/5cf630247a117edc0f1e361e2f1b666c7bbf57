@@ -1,0 +1,14 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "f75cf630247a117edc0f1e361e2f1b666c7bbf57",
+  "prompts": {},
+  "humans": {
+    "h_ecbbd53968655c": {
+      "author": "liuchenglong-THUIBE <liuchenglong-THUIBE@users.noreply.github.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
