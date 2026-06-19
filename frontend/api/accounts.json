@@ -56,13 +56,6 @@
     "round_head_img": "http://mmbiz.qpic.cn/mmbiz_png/uOsWI2GCFEVOtLsem8Qlicm4ia4wu3dOpN9fjF37Ka2Qq80e8lle48hA2icWQ24sDicX67wliaYPgpCOgDY3y0MxSrQ/0?wx_fmt=png"
   },
   {
-    "account_name": "叁拾有理",
-    "fakeid": "11",
-    "description": "常州杰福瑞体育始创于2011年，迄今为止已有10年，多年来一直是最具有影响力的专业篮球俱乐部之一。为常州市各中小学培养输送多名校队队员，并培养输送多名篮球特长生，输送到我市体育运动学校篮球专业训练队多名，正式注册男女篮运动员30多名。",
-    "alias": "TC13775273207",
-    "round_head_img": "http://mmbiz.qpic.cn/mmbiz_png/tMUNjPAWKU6UzD0NGERCDwOmeJLL4KOmoMpd577Mq6xWPW32cZkyDm3ANFYZWUUjuHY5pCuIQCtuQnSLhibjia7w/0?wx_fmt=png"
-  },
-  {
     "account_name": "三石观察",
     "fakeid": "MzUxNjY3NDc1NQ==",
     "description": "经济运行与资产价格思考",
@@ -473,13 +466,6 @@
     "round_head_img": "http://mmbiz.qpic.cn/mmbiz_png/vfQ4rrWP2fpM9yKFaZmNiauv7s1ibMp2mzsAYc6chO98PyYmpFqllic24RXPia33Twt2UOOOc9bT1HM0Jc9TqowOTw/0?wx_fmt=png"
   },
   {
-    "account_name": "iSweeety",
-    "fakeid": "96",
-    "description": "记录对商业、科技、互联网的一点思考",
-    "alias": "ghmaiwrt040711",
-    "round_head_img": "http://mmbiz.qpic.cn/sz_mmbiz_png/Ka7CfALb1p4yWo2IXmOWgqzz9fHkKnxAibt0sFiaxQVH4pfb4dmbwClMNhYG4RmGvllSkAdpiagic1beDTa7c1WmlA/0?wx_fmt=png"
-  },
-  {
     "account_name": "剑峰使舵",
     "fakeid": "MzkxMjIzNDQ1NA==",
     "description": "分析经济动向 分享读书体会 闲聊逸闻趣事",
@@ -669,13 +655,6 @@
     "round_head_img": "http://mmbiz.qpic.cn/mmbiz_png/cSibBHwXxPickRblFIch1z6o6zZSnLxdg2XEGiaDyht7XicG3J2MUSh8O9MOEapfDSGy13l5pugT4KZ6FP4SL9BKnQ/0?wx_fmt=png"
   },
   {
-    "account_name": "睁眼看世界的Yu",
-    "fakeid": "141",
-    "description": "希望今天的你也很开心😊",
-    "alias": "InnaWang0502",
-    "round_head_img": "http://mmbiz.qpic.cn/mmbiz_png/lI9IeAxwX2ia6nc1QjAFw16WVRq7s6RnYexNkoQc4c3f8gu6VpxVL0Ekq5Cia2s4qkB8Dgc1btJsMxTaQiaGINIOA/0?wx_fmt=png"
-  },
-  {
     "account_name": "侦探猫",
     "fakeid": "MzA3NjE2MzQ3OA==",
     "description": "谎言太多，我们只想说一点真话！",
@@ -735,9 +714,10 @@
     "id": 4
   },
   {
-    "account_name": "睁眼看世界",
-    "fakeid": "MjM5OTQ2Nzk5Ng==",
-    "description": "希望今天的你也很开心😊",
-    "id": 5
+    "id": 5,
+    "account_name": "峥眼看世界的Yu",
+    "fakeid": "MjM5ODIwODQ5NA==",
+    "description": "人类的高贵在于我们的求知欲。",
+    "alias": "AngelYu_World"
   }
 ]
