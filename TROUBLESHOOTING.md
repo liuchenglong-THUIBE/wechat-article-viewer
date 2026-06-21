@@ -37,6 +37,8 @@ wechat-reader weekly-update --days 1
 
 如果是 AI Agent 正在操作项目，它应当停止自动流程，并请求用户手动完成登录。
 
+定时任务建议使用 `weekly-update --no-login`。这样 session 无效时任务会直接退出并写日志，不会在无人值守环境中打开浏览器等待扫码。
+
 ## LLM API Key 或模型配置失败
 
 典型现象：

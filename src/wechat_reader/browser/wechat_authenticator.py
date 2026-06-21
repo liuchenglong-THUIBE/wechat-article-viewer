@@ -25,9 +25,12 @@ class WechatAuthenticator:
         self.browser_manager = BrowserManager()
         self.login_url = f"{WECHAT_MP_URL}/"
 
-    def ensure_authenticated(self) -> bool:
+    def ensure_authenticated(self, allow_browser_login: bool = True) -> bool:
         """
         确保已认证（自动处理会话复用和登录）
+
+        Args:
+            allow_browser_login: 会话不可用时是否允许打开浏览器扫码登录
 
         Returns:
             是否认证成功
@@ -43,11 +46,16 @@ class WechatAuthenticator:
                 logger.info("会话验证成功，可以直接使用")
                 return True
 
-            logger.warning("会话验证失败，需要重新登录")
+            logger.warning("会话验证失败")
         else:
-            logger.info("未找到有效会话，需要登录")
+            logger.info("未找到有效会话")
+
+        if not allow_browser_login:
+            logger.warning("当前模式禁止自动打开浏览器登录，请用户稍后手动登录后重试")
+            return False
 
         # 3. 启动浏览器登录
+        logger.info("允许浏览器登录，开始登录流程")
         return self._do_browser_login()
 
     def _verify_session(self) -> bool:

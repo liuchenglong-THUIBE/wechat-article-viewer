@@ -28,6 +28,6 @@ cd "$PROJECT_DIR"
 export PYTHONPATH="$PROJECT_DIR/src"
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] 每日更新开始"
-"$PYTHON_BIN" -m wechat_reader weekly-update --days "$DAYS"
+"$PYTHON_BIN" -m wechat_reader weekly-update --days "$DAYS" --no-login
 "$PYTHON_BIN" -m wechat_reader export --sync
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] 每日更新完成"

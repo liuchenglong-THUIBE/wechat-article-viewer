@@ -42,8 +42,11 @@ class Config:
         self._config = {}
 
         # 确定配置文件路径
+        env_config_path = os.environ.get("WECHAT_READER_CONFIG_PATH")
         if config_path:
             self.config_path = Path(config_path)
+        elif env_config_path:
+            self.config_path = Path(env_config_path).expanduser()
         else:
             # 默认在项目根目录
             project_root = Path(__file__).parent.parent.parent.parent

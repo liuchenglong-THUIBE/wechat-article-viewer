@@ -7,7 +7,6 @@ JSON 数据存储模块
 
 import json
 import threading
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
@@ -121,10 +120,6 @@ class JsonStorage:
             max_id = max([a.get("id", 0) for a in articles], default=0)
             article_data["id"] = max_id + 1
 
-            # 添加时间戳
-            if "created_at" not in article_data:
-                article_data["created_at"] = datetime.now().isoformat()
-
             articles.append(article_data)
 
             # 写入文件
@@ -140,7 +135,6 @@ class JsonStorage:
             for i, article in enumerate(articles):
                 if article.get("id") == article_id:
                     articles[i].update(updates)
-                    articles[i]["updated_at"] = datetime.now().isoformat()
                     self._write_json(self.data_dir / "articles.json", articles)
                     return articles[i]
 

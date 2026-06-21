@@ -82,9 +82,7 @@ function renderFeed() {
     let articles = [...state.articles];
 
     articles = articles.sort((a, b) => {
-        const timeA = a.publishTime || a.created_at || '';
-        const timeB = b.publishTime || b.created_at || '';
-        return String(timeB).localeCompare(String(timeA));
+        return compareArticlesByPublishTimeDesc(a, b);
     });
 
     if (articles.length === 0) {
@@ -97,7 +95,7 @@ function renderFeed() {
         const isExpanded = state.expandedArticleIdFeed === article.id;
         const title = article.article_title || article.title || '无标题';
         const accountName = article.account_name || article.accountName || '未知公众号';
-        const publishTime = article.publish_time || article.publishTime || article.created_at || '';
+        const publishTime = getArticlePublishTime(article);
         const summary = article.article_summary || article.summary || '';
         const url = article.article_link || article.url || '#';
 
@@ -197,9 +195,7 @@ function renderAccountArticles(accountName) {
         return articleAccount === accountName;
     });
     articles = articles.sort((a, b) => {
-        const timeA = a.publishTime || a.created_at || '';
-        const timeB = b.publishTime || b.created_at || '';
-        return String(timeB).localeCompare(String(timeA));
+        return compareArticlesByPublishTimeDesc(a, b);
     });
 
     if (articles.length === 0) {
@@ -212,7 +208,7 @@ function renderAccountArticles(accountName) {
         const isExpanded = state.expandedArticleIdAccounts === article.id;
         const title = article.article_title || article.title || '无标题';
         const accountName = article.account_name || article.accountName || '未知公众号';
-        const publishTime = article.publish_time || article.publishTime || article.created_at || '';
+        const publishTime = getArticlePublishTime(article);
         const summary = article.article_summary || article.summary || '';
         const url = article.article_link || article.url || '#';
 
@@ -311,7 +307,7 @@ function renderArticleCard(article, context) {
     const isExpanded = state.expandedArticleIdMy === article.id;
     const title = article.article_title || article.title || '无标题';
     const accountName = article.account_name || article.accountName || '未知公众号';
-    const publishTime = article.publish_time || article.publishTime || article.created_at || '';
+    const publishTime = getArticlePublishTime(article);
     const summary = article.article_summary || article.summary || '';
     const url = article.article_link || article.url || '#';
 
@@ -375,6 +371,24 @@ function toggleCollect(articleId) {
 }
 
 // 工具函数
+function getArticlePublishTime(article) {
+    return article.publish_time || article.publishTime || '';
+}
+
+function compareArticlesByPublishTimeDesc(a, b) {
+    const timeA = getArticlePublishTime(a);
+    const timeB = getArticlePublishTime(b);
+    const timestampA = Date.parse(timeA);
+    const timestampB = Date.parse(timeB);
+
+    if (Number.isNaN(timestampA) && Number.isNaN(timestampB)) {
+        return String(timeB).localeCompare(String(timeA));
+    }
+    if (Number.isNaN(timestampA)) return 1;
+    if (Number.isNaN(timestampB)) return -1;
+    return timestampB - timestampA;
+}
+
 function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');

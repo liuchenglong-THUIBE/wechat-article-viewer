@@ -105,7 +105,7 @@ class WechatReader:
                 "article_title": html_title or "未知标题",
                 "article_link": url,
                 "article_summary": summary,
-                "publish_time": html_publish_time or datetime.now().isoformat(),
+                "publish_time": html_publish_time,
             })
 
             logger.info(f"文章采集成功: {url}")
@@ -436,7 +436,11 @@ class WechatReader:
                 "total_articles": 0,
             }
 
-    def batch_collect_article_links(self, days: int = 7) -> dict[str, Any]:
+    def batch_collect_article_links(
+        self,
+        days: int = 7,
+        allow_browser_login: bool = True,
+    ) -> dict[str, Any]:
         """
         第一阶段：批量快速获取所有公众号的文章链接（不提取内容）
 
@@ -457,8 +461,12 @@ class WechatReader:
         logger.info(f"[阶段1] 批量获取文章链接，共 {len(monitors)} 个公众号，最近 {days} 天")
 
         # 1. 确保已认证（只认证一次）
-        if not self.wechat_auth.ensure_authenticated():
-            return {"success": False, "message": "微信认证失败", "articles": []}
+        if not self.wechat_auth.ensure_authenticated(allow_browser_login=allow_browser_login):
+            return {
+                "success": False,
+                "message": "微信认证失败：已有 session 无效或无法验证，请手动登录后重试",
+                "articles": [],
+            }
 
         session_data = self.wechat_auth.get_session_data()
         if not session_data:
@@ -647,7 +655,11 @@ class WechatReader:
             "failed": failed,
         }
 
-    def optimized_weekly_update(self, days: int = 7) -> dict[str, Any]:
+    def optimized_weekly_update(
+        self,
+        days: int = 7,
+        allow_browser_login: bool = True,
+    ) -> dict[str, Any]:
         """
         优化的每周更新（两阶段处理）
 
@@ -656,6 +668,7 @@ class WechatReader:
 
         Args:
             days: 获取最近几天的文章
+            allow_browser_login: session 不可用时是否允许打开浏览器扫码登录
 
         Returns:
             更新结果统计
@@ -664,7 +677,10 @@ class WechatReader:
 
         # 阶段1：快速获取文章链接
         start_time = time.time()
-        stage1_result = self.batch_collect_article_links(days)
+        stage1_result = self.batch_collect_article_links(
+            days,
+            allow_browser_login=allow_browser_login,
+        )
         stage1_time = time.time() - start_time
 
         if not stage1_result.get("success"):

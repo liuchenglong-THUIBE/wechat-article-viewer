@@ -177,14 +177,19 @@ def monitor_list(ctx: click.Context) -> None:
     default=7,
     help="获取最近几天的文章，默认7天",
 )
+@click.option(
+    "--no-login",
+    is_flag=True,
+    help="禁止自动打开浏览器登录；session 无效时直接退出",
+)
 @click.pass_context
-def weekly_update(ctx: click.Context, days: int) -> None:
+def weekly_update(ctx: click.Context, days: int, no_login: bool) -> None:
     """执行每周更新（使用两阶段优化采集：先快速获取链接，再并发生成摘要）"""
     config = ctx.obj["config"]
     reader = WechatReader(config=config)
 
     click.echo(f"[开始] 每周更新（两阶段+10并发），获取最近 {days} 天的文章...")
-    result = reader.optimized_weekly_update(days=days)
+    result = reader.optimized_weekly_update(days=days, allow_browser_login=not no_login)
 
     if result.get("success"):
         click.echo(f"[成功] {result.get('message')}")

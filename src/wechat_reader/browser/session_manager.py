@@ -1,6 +1,7 @@
 """会话管理模块 - 保存和加载微信公众平台登录会话"""
 
 import json
+import os
 import time
 from pathlib import Path
 from typing import Any, cast
@@ -17,9 +18,13 @@ class SessionManager:
             session_file: 会话文件路径
         """
         if session_file is None:
-            # 默认在项目根目录的 data 文件夹
-            project_root = Path(__file__).parent.parent.parent.parent
-            session_file = project_root / "data" / "session.json"
+            env_session_file = os.environ.get("WECHAT_READER_SESSION_FILE")
+            if env_session_file:
+                session_file = Path(env_session_file).expanduser()
+            else:
+                # 默认在项目根目录的 data 文件夹
+                project_root = Path(__file__).parent.parent.parent.parent
+                session_file = project_root / "data" / "session.json"
 
         self.session_file = session_file
         self.session_file.parent.mkdir(parents=True, exist_ok=True)

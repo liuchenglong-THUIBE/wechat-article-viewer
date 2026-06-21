@@ -156,6 +156,8 @@ tail -f logs/daily-update.log
 tail -f logs/daily-update.err.log
 ```
 
+定时脚本默认使用 `weekly-update --no-login`：如果已有 session 有效，就继续爬取；如果 session 无效或无法验证，就停止本次任务，等待用户手动登录后再重试。
+
 ## 发布网站
 
 前端是位于 `frontend` 的静态网站。
