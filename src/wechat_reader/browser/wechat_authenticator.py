@@ -87,6 +87,7 @@ class WechatAuthenticator:
             # 检查是否跳转到登录后的页面
             if any(keyword in response.url for keyword in ["cgi-bin/home", "token=", "home/index"]):
                 logger.info(f"会话有效，当前URL: {response.url}")
+                self._update_cookies_from_response(response, session_data)
                 return True
 
             logger.warning(f"会话已失效，被重定向到: {response.url}")
@@ -95,6 +96,41 @@ class WechatAuthenticator:
         except Exception as e:
             logger.warning(f"验证会话时出错: {e}")
             return False
+
+
+    def _update_cookies_from_response(self, response: requests.Response, old_session_data: dict) -> None:
+        """
+        从请求响应中提取并更新可能已刷新的 cookies
+        """
+        try:
+            if not response.cookies:
+                return
+
+            # 获取所有当前缓存的 cookie
+            old_cookies = old_session_data.get("cookies", [])
+            cookie_dict = {c["name"]: c for c in old_cookies}
+            
+            updated = False
+            for cookie in response.cookies:
+                name = cookie.name
+                value = cookie.value
+                
+                # 如果 cookie 存在且发生变化，或者是一个新的 cookie
+                if name not in cookie_dict or cookie_dict[name].get("value") != value:
+                    if name not in cookie_dict:
+                        cookie_dict[name] = {"name": name, "value": value, "domain": cookie.domain or ".qq.com", "path": cookie.path or "/"}
+                    else:
+                        cookie_dict[name]["value"] = value
+                    updated = True
+                    
+            if updated:
+                new_cookies = list(cookie_dict.values())
+                token = old_session_data.get("token")
+                other_data = old_session_data.get("other_data")
+                self.session_manager.save_session(new_cookies, token, other_data)
+                logger.info("已在验证时更新并持久化最新的 cookies")
+        except Exception as e:
+            logger.debug(f"更新 cookies 失败: {e}")
 
     def _do_browser_login(self) -> bool:
         """

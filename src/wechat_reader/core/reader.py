@@ -196,6 +196,9 @@ class WechatReader:
                     headers=headers,
                     timeout=30
                 )
+                
+                # 更新可能刷新的 cookies
+                self.wechat_auth._update_cookies_from_response(response, session_data)
 
                 result = response.json()
 
