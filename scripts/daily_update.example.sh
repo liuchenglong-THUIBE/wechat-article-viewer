@@ -28,6 +28,17 @@ cd "$PROJECT_DIR"
 export PYTHONPATH="$PROJECT_DIR/src"
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] 每日更新开始"
+
+# 等待网络连接就绪（最多等待 60 秒）
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 正在等待网络连接..."
+for i in {1..60}; do
+  if ping -c 1 -W 1 mp.weixin.qq.com >/dev/null 2>&1; then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] 网络已就绪"
+    break
+  fi
+  sleep 1
+done
+
 "$PYTHON_BIN" -m wechat_reader weekly-update --days "$DAYS" --no-login
 "$PYTHON_BIN" -m wechat_reader export --sync
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] 每日更新完成"
