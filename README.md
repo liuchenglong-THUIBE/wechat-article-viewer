@@ -66,7 +66,7 @@ wechat-reader export --sync
 ```text
 请先阅读 README.md、AGENTS.md、QUICKSTART.md 和 TROUBLESHOOTING.md。
 请帮我在本地配置这个微信公众号文章阅读器，添加我要监控的公众号，
-运行一次更新测试，并安装每天 10:00 执行的本地定时任务。
+运行一次更新测试，并安装每天 11:30 执行的本地定时任务。
 不要提交 .env、config.json、data/session.json、logs、backups 或本地运行文件。
 ```
 

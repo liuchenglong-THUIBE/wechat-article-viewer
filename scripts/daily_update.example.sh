@@ -32,7 +32,7 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] 每日更新开始"
 # 等待网络连接就绪（无限期等待直到网络恢复）
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] 正在等待网络连接..."
 while ! ping -c 1 -W 2000 mp.weixin.qq.com >/dev/null 2>&1; do
-  sleep 30
+  sleep 1800
 done
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] 网络已就绪"
 

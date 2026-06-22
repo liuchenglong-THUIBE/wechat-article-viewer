@@ -106,8 +106,8 @@ PYTHONPATH=src python3 -m wechat_reader export --sync
 
 ```text
 __DAYS__=2
-__HOUR__=10
-__MINUTE__=0
+__HOUR__=11
+__MINUTE__=30
 ```
 
 除非用户更希望严格只采集过去一天，否则每日更新建议使用 `--days 2`。系统会按文章链接去重，这样可以减少跨天边界漏抓的风险。
@@ -138,6 +138,6 @@ tail -f logs/daily-update.err.log
 请先阅读 README.md、AGENTS.md、QUICKSTART.md 和 TROUBLESHOOTING.md。
 请帮我在本地配置这个微信公众号文章阅读器。
 使用我的 LLM API Key，添加我要监控的公众号，运行一次更新测试，
-并安装每天 10:00 执行的本地定时任务。
+并安装每天 11:30 执行的本地定时任务。
 不要提交 .env、config.json、data/session.json、logs、backups 或本地运行文件。
 ```
